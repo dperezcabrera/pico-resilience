@@ -1,0 +1,18 @@
+[run]
+branch = True
+source =
+    pico_resilience
+omit =
+    */_version.py
+
+[paths]
+pico_resilience =
+    src/pico_resilience
+    .tox/*/lib/*/site-packages/pico_resilience
+    .tox/*/site-packages/pico_resilience
+    */site-packages/pico_resilience
+
+[report]
+show_missing = True
+omit =
+    */_version.py
