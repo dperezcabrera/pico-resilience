@@ -1,4 +1,4 @@
-# 📦 pico-resilience
+# pico-resilience
 
 [![PyPI](https://img.shields.io/pypi/v/pico-resilience.svg)](https://pypi.org/project/pico-resilience/)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/dperezcabrera/pico-resilience)
