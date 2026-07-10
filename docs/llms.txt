@@ -1,0 +1,24 @@
+# pico-resilience
+
+> Resilience AOP for the Pico ecosystem: @retryable, @circuit_breaker and @timeout method interceptors.
+
+## Docs
+
+- [Home](https://dperezcabrera.github.io/pico-resilience/)
+- [Getting Started](https://dperezcabrera.github.io/pico-resilience/getting-started/)
+- [Learning Roadmap](https://dperezcabrera.github.io/pico-resilience/LEARN/)
+- [Architecture](https://dperezcabrera.github.io/pico-resilience/architecture/)
+- [Hot Config Reload](https://dperezcabrera.github.io/pico-resilience/how-to-hot-reload/)
+- [index](https://dperezcabrera.github.io/pico-resilience/reference/)
+- [API](https://dperezcabrera.github.io/pico-resilience/reference/api/)
+- [AI Coding Skills](https://dperezcabrera.github.io/pico-resilience/skills/)
+- [FAQ](https://dperezcabrera.github.io/pico-resilience/faq/)
+- [Troubleshooting](https://dperezcabrera.github.io/pico-resilience/troubleshooting/)
+- [Changelog](https://dperezcabrera.github.io/pico-resilience/CHANGELOG/)
+
+## For agents
+
+- [Full docs in one file](https://dperezcabrera.github.io/pico-resilience/llms-full.txt)
+- [AGENTS.md (conventions and boundaries)](https://raw.githubusercontent.com/dperezcabrera/pico-resilience/main/AGENTS.md)
+- [Flagship use case (whole ecosystem wired)](https://dperezcabrera.github.io/pico-boot/flagship/)
+- [PyPI](https://pypi.org/project/pico-resilience/)
