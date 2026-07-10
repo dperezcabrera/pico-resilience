@@ -146,3 +146,76 @@ def test_policies_below_retryable_wrap_the_whole_loop(make_container):
     assert svc.flaky() == "ok"
     assert svc.calls == 3
     assert CountingInterceptor.invocations == 1
+
+
+@component
+class FlakySync:
+    def __init__(self):
+        self.calls = 0
+
+    @retryable(max_attempts=2, backoff_seconds=0.01)
+    def always_fails(self):
+        self.calls += 1
+        raise ValueError("nope")
+
+
+def test_retry_exhausted_sync(make_container):
+    svc = make_container(sys.modules[__name__]).get(FlakySync)
+    with pytest.raises(RetryExhaustedError) as e:
+        svc.always_fails()
+    assert e.value.attempts == 2
+    assert isinstance(e.value.last_error, ValueError)
+    assert svc.calls == 2
+
+
+@component
+class AsyncBreaker:
+    def __init__(self):
+        self.calls = 0
+
+    @circuit_breaker(failure_threshold=2, reset_timeout_seconds=0.2)
+    async def unstable(self, fail: bool):
+        self.calls += 1
+        if fail:
+            raise ConnectionError("down")
+        return "up"
+
+
+def test_async_circuit_opens_then_half_opens(make_container):
+    svc = make_container(sys.modules[__name__]).get(AsyncBreaker)
+    for _ in range(2):
+        with pytest.raises(ConnectionError):
+            asyncio.run(svc.unstable(fail=True))
+    with pytest.raises(CircuitOpenError):
+        asyncio.run(svc.unstable(fail=False))
+    assert svc.calls == 2
+    time.sleep(0.25)
+    assert asyncio.run(svc.unstable(fail=False)) == "up"
+    assert asyncio.run(svc.unstable(fail=False)) == "up"
+
+
+def test_disabled_bypasses_circuit_and_timeout(make_container):
+    container = make_container(sys.modules[__name__], enabled=False)
+    breaker = container.get(Breaker)
+    for _ in range(3):
+        with pytest.raises(ConnectionError):
+            breaker.unstable(fail=True)
+    assert breaker.calls == 3
+    assert asyncio.run(container.get(Slow).quick()) == "fast"
+
+
+def test_retryable_rejects_zero_attempts():
+    with pytest.raises(ValueError, match="max_attempts"):
+        retryable(max_attempts=0)
+
+
+def test_circuit_breaker_rejects_zero_threshold():
+    with pytest.raises(ValueError, match="failure_threshold"):
+        circuit_breaker(failure_threshold=0)
+
+
+def test_timeout_rejects_non_positive_seconds():
+    with pytest.raises(ValueError, match="positive"):
+        timeout(0)
+    with pytest.raises(ValueError, match="positive"):
+        timeout("1")
