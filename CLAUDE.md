@@ -6,7 +6,7 @@ pico-resilience provides resilience AOP (@retryable, @circuit_breaker, @timeout)
 
 ## Key Reminders
 
-- pico-ioc dependency: `>= 2.2.0`
+- pico-ioc dependency: `>= 2.3.0` (ConfigChanged; hot reload)
 - **NEVER change `version_scheme`** in pyproject.toml. It MUST remain `"post-release"`.
 - requires-python >= 3.11
 - Commit messages: one line only
