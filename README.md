@@ -46,6 +46,17 @@ Failures raise `RetryExhaustedError` / `CircuitOpenError` / `TimeoutError` with 
 
 Chain rule: put `@retryable` **at the top** when combining decorators (it runs innermost); `@circuit_breaker`/`@cacheable` below it then wrap the whole retry loop — the circuit counts exhausted retries and the cache stores the final result. `@timeout` rejects sync methods at import time: a thread cannot be cancelled, and a timeout that lies is worse than none.
 
+## Hot config reload
+
+`resilience.enabled` reacts live to `container.refresh_config()` (or pico-actuator's `POST /actuator/refresh`) — pico-ioc >= 2.3.0:
+
+```python
+data["resilience"]["enabled"] = False
+container.refresh_config()   # every policy passes through from this moment
+```
+
+Hot reload is on by default and requires an EventBus (`pico_ioc.event_bus` in `init(modules=[...])`); without one, startup fails fast. Opt out explicitly with `resilience.hot_reload: false`. See the [Hot Config Reload how-to](https://dperezcabrera.github.io/pico-resilience/how-to-hot-reload/).
+
 ## Documentation
 
 Full docs at **[dperezcabrera.github.io/pico-resilience](https://dperezcabrera.github.io/pico-resilience/)**.
