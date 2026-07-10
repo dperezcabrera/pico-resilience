@@ -12,7 +12,7 @@ method interception, auto-discovered by pico-boot. Zero-config.
 | Decorator | Policy |
 |---|---|
 | `@retryable` | Exponential-backoff retry (sync + async) |
-| `@circuit_breaker` | Per-method circuit: closed → open → half-open |
+| `@circuit_breaker` | Per-method circuit: closed  open  half-open |
 | `@timeout` | Async time budget via `asyncio.timeout` |
 
 ## 30-second example

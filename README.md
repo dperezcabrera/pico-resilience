@@ -17,7 +17,7 @@ Spring-style **resilience annotations** for the [Pico](https://github.com/dperez
 | Decorator | Policy |
 |---|---|
 | `@retryable(max_attempts, backoff_seconds, retry_on)` | Exponential-backoff retry (sync + async) |
-| `@circuit_breaker(failure_threshold, reset_timeout_seconds)` | Per-method circuit: closed → open → half-open |
+| `@circuit_breaker(failure_threshold, reset_timeout_seconds)` | Per-method circuit: closed  open  half-open |
 | `@timeout(seconds)` | Async time budget via `asyncio.timeout` |
 
 ## Install
