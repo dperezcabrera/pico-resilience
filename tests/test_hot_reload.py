@@ -84,6 +84,24 @@ def test_removing_the_block_falls_back_to_enabled(make_container_with_source):
     assert container.get(ResilienceSettings).enabled is True
 
 
+def test_missing_eventbus_fails_fast():
+    from pico_ioc import ConfigurationError, DictSource, configuration, init
+
+    with pytest.raises(ConfigurationError, match="hot_reload"):
+        init(modules=["pico_resilience"], config=configuration(DictSource({})))
+
+
+def test_hot_reload_opt_out_allows_busless_containers():
+    from pico_ioc import DictSource, configuration, init
+
+    container = init(
+        modules=["pico_resilience", sys.modules[__name__]],
+        config=configuration(DictSource({"resilience": {"hot_reload": False}})),
+    )
+    svc = container.get(FragileService)
+    assert svc.eventually_ok() == "ok"
+
+
 def test_refresher_without_config_manager_is_inert():
     from pico_resilience import ResilienceSettings
     from pico_resilience.refresh import ResilienceConfigRefresher

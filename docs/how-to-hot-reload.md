@@ -21,9 +21,10 @@ IN PLACE — every interceptor sees the new value on its next invocation.
 
 Requirements and limits:
 
-- An `EventBus` must be registered (module `pico_ioc.event_bus`; pico-boot
-  apps usually have it). Without one the refresher is inert — nothing breaks,
-  values simply stay as built.
+- An `EventBus` must be registered (module `pico_ioc.event_bus`). Hot reload
+  is on by default and FAILS FAST at startup if the bus is missing — a config
+  knob that silently stops reloading is worse than a crash. Containers that
+  do not want it opt out explicitly with `resilience.hot_reload: false`.
 - The refresh trigger lives outside: pico-actuator's `POST /actuator/refresh`,
   a file watcher, or your own call to `container.refresh_config()`.
 - Only `resilience.enabled` is config. Per-method policies (attempts,

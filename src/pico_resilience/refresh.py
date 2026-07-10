@@ -5,14 +5,16 @@ components that need live config subscribe to ConfigChanged and re-read.
 This subscriber updates the shared ResilienceSettings IN PLACE, so every
 interceptor holding it sees the new value on the next invocation.
 
-Inert without an EventBus: apps that never registered one (or never call
-refresh_config) pay nothing. Only settings-driven behavior reloads (today:
-``enabled``); per-method policies are decorator arguments — code, not config.
+Fail-fast: hot reload is on by default and REQUIRES an EventBus — a missing
+bus raises at startup instead of silently not reloading. Opt out explicitly
+with ``resilience.hot_reload: false``. Only settings-driven behavior reloads
+(today: ``enabled``); per-method policies are decorator arguments — code,
+not config.
 """
 
 import logging
 
-from pico_ioc import ConfigChanged, EventBus, PicoContainer, component, configure
+from pico_ioc import ConfigChanged, ConfigurationError, EventBus, PicoContainer, component, configure
 
 from .config import ResilienceSettings
 
@@ -27,8 +29,14 @@ class ResilienceConfigRefresher:
 
     @configure
     def wire(self) -> None:
-        if not self._container.has(EventBus):
+        if not self._settings.hot_reload:
             return
+        if not self._container.has(EventBus):
+            raise ConfigurationError(
+                "resilience.hot_reload is on but no EventBus is registered: add "
+                "'pico_ioc.event_bus' to init(modules=[...]) or opt out explicitly "
+                "with resilience.hot_reload=false"
+            )
         self._container.get(EventBus).subscribe(ConfigChanged, self.on_config_changed)
 
     def on_config_changed(self, event: ConfigChanged) -> None:

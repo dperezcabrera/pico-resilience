@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Hot config reload: `ResilienceConfigRefresher` subscribes to `ConfigChanged` (when an `EventBus` is registered) and updates `resilience.enabled` in place, so `container.refresh_config()` enables/disables every policy live. Inert without an EventBus.
+- Hot config reload: `ResilienceConfigRefresher` subscribes to `ConfigChanged` and updates `resilience.enabled` in place, so `container.refresh_config()` enables/disables every policy live.
+- Fail-fast: hot reload is on by default and requires an EventBus — startup raises `ConfigurationError` if none is registered. Opt out explicitly with `resilience.hot_reload: false` (new setting).
 - Ecosystem e2e test: fastapi + httpx + caching + resilience with live toggling.
 
 ## [0.1.0] - 2026-07-03
