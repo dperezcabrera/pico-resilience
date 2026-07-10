@@ -114,6 +114,8 @@ nav:
   - Getting Started: getting-started.md
   - Learning Roadmap: LEARN.md
   - Architecture: architecture.md
+  - How-To:
+    - Hot Config Reload: how-to-hot-reload.md
   - Reference:
     - reference/index.md
     - API: reference/api.md

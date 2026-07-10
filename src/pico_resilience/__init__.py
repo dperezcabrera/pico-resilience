@@ -16,6 +16,7 @@ from .config import ResilienceSettings
 from .decorators import circuit_breaker, retryable, timeout
 from .exceptions import CircuitOpenError, PicoResilienceError, RetryExhaustedError
 from .interceptors import CircuitBreakerInterceptor, RetryInterceptor, TimeoutInterceptor
+from .refresh import ResilienceConfigRefresher
 
 __all__ = [
     "retryable",
@@ -28,4 +29,5 @@ __all__ = [
     "RetryInterceptor",
     "CircuitBreakerInterceptor",
     "TimeoutInterceptor",
+    "ResilienceConfigRefresher",
 ]
