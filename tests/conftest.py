@@ -3,18 +3,14 @@ from pico_ioc import DictSource, configuration, init
 
 
 @pytest.fixture
-def make_container():
-    created = []
+def make_container(make_container):
+    """Extends the plugin fixture: resilience toggle shortcut plus the EventBus module."""
+    plugin_make = make_container
 
     def _make(module, enabled=True):
-        cfg = configuration(DictSource({"resilience": {"enabled": enabled}}))
-        c = init(modules=["pico_resilience", "pico_ioc.event_bus", module], config=cfg)
-        created.append(c)
-        return c
+        return plugin_make("pico_ioc.event_bus", module, config={"resilience": {"enabled": enabled}})
 
-    yield _make
-    for c in created:
-        c.shutdown()
+    return _make
 
 
 @pytest.fixture
