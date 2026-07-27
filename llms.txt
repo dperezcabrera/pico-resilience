@@ -1,0 +1,47 @@
+# pico-resilience
+
+> Resilience AOP for the Pico ecosystem: @retryable, @circuit_breaker and @timeout method interceptors.
+
+Install: `pip install pico-resilience`. Import surface: `from pico_resilience import ...`.
+
+## Usage
+
+```python
+from pico_ioc import component
+from pico_resilience import retryable, circuit_breaker, timeout
+
+@component
+class PaymentGateway:
+    @retryable(max_attempts=3, backoff_seconds=0.2, retry_on=(ConnectionError,))
+    @circuit_breaker(failure_threshold=5, reset_timeout_seconds=30)
+    def charge(self, order): ...
+
+    @timeout(2.0)
+    async def query_partner(self, q): ...
+```
+
+## Public API
+
+- `retryable(_func: Callable | None=None, *, max_attempts: int=3, backoff_seconds: float=0.1, retry_on: Tuple[Type[BaseException], ...]=(Exception,))` — Retry on failure with exponential backoff. Sync or async. Raises
+- `circuit_breaker(_func: Callable | None=None, *, failure_threshold: int=5, reset_timeout_seconds: float=30.0)` — Per-method circuit: opens after N consecutive failures (calls raise
+- `timeout(seconds: float)` — Bound an async method with ``asyncio.timeout``. Sync methods are
+- `class ResilienceSettings` — ``enabled: false`` turns every interceptor into a pass-through.
+- `class PicoResilienceError(Exception)` — Base exception for all pico-resilience errors.
+- `class RetryExhaustedError(PicoResilienceError)` — Raised when a ``@retryable`` method fails on every attempt.
+- `class CircuitOpenError(PicoResilienceError)` — Raised when a call is rejected because the circuit is open.
+- `class RetryInterceptor` — Retries the method per its ``@retryable`` policy.
+- `class CircuitBreakerInterceptor` — Per-method circuit: closed -> open -> half-open -> closed.
+- `class TimeoutInterceptor` — Bounds async methods with ``asyncio.timeout``.
+- `class ResilienceConfigRefresher`
+
+## Docs
+
+- docs/CHANGELOG.md
+- docs/LEARN.md
+- docs/architecture.md
+- docs/faq.md
+- docs/getting-started.md
+- docs/how-to-hot-reload.md
+- docs/reference/ (2 pages)
+- docs/skills.md
+- docs/troubleshooting.md
