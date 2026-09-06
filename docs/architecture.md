@@ -40,3 +40,7 @@ circuit — the protected resource is the dependency, not the instance.
 **Half-open allows exactly one trial.** On entry the failure counter is set
 to `threshold - 1`: a single failure reopens, a success resets. No separate
 state enum to keep in sync.
+
+## Stability and versioning
+
+This module follows the ecosystem policy in [ADR-014: API Stability and Deprecation](https://github.com/dperezcabrera/pico-ioc/blob/main/docs/adr/adr-0014-api-stability-and-deprecation.md). The public API is exactly what `__all__` exports plus the `resilience.*` settings keys and their defaults, pinned by `tests/test_exports.py`. Before 1.0 a breaking change ships as a minor release; a deprecated name keeps working, with a `DeprecationWarning` naming its replacement, for at least one minor release and 90 days before removal.
