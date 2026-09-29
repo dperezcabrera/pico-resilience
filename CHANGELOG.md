@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Dependency floors raised to what the test suite proves: `pico-ioc >= 2.3.3` (was 2.3.0). A new CI job runs the suite with every declared floor pinned, so a floor that installs but does not work can no longer ship.
+
 ## [0.2.1] - 2026-07-10
 
 ### Fixed

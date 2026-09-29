@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "pico-ioc >= 2.3.0",
+    "pico-ioc >= 2.3.3",
 ]
 
 [project.optional-dependencies]
